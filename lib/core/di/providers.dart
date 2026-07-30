@@ -10,6 +10,7 @@ import '../../shared/repositories/comic_repository.dart';
 import '../../shared/services/hive_service.dart';
 import '../../shared/services/mangadex_service.dart';
 import '../../shared/services/openverse_service.dart';
+import '../../shared/services/comicvine_service.dart';
 
 // ── Shared Preferences ───────────────────────────────────────────────────────
 
@@ -178,6 +179,12 @@ final comicByIdProvider = FutureProvider.family<Comic?, String>((ref, id) async 
     return matched;
   }
 
+  if (id.startsWith('cv_')) {
+    final cleanId = id.substring(3);
+    final cvService = ComicVineService();
+    return await cvService.getVolumeDetails(cleanId);
+  }
+
   final repo = ref.watch(comicRepositoryProvider);
   return repo.getComicById(id);
 });
@@ -219,6 +226,12 @@ final searchResultsProvider = FutureProvider<List<Comic>>((ref) async {
       final ovService = OpenverseService();
       final ovResults = await ovService.searchImages(query);
       results.addAll(ovResults);
+    } catch (_) {}
+
+    try {
+      final cvService = ComicVineService();
+      final cvResults = await cvService.searchVolumes(query);
+      results.addAll(cvResults);
     } catch (_) {}
   }
 

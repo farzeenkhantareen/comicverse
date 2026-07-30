@@ -310,17 +310,29 @@ class FeaturedComicCard extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 height: AppSizes.heroCarouselHeight,
-                child: Image.asset(
-                  'assets/${comic.coverAsset}',
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    decoration: const BoxDecoration(gradient: AppColors.heroGradient),
-                    child: const Center(
-                      child: Icon(Icons.auto_stories_rounded,
-                          color: Colors.white38, size: 80),
-                    ),
-                  ),
-                ),
+                child: comic.coverAsset.startsWith('http')
+                    ? Image.network(
+                        comic.coverAsset,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          decoration: const BoxDecoration(gradient: AppColors.heroGradient),
+                          child: const Center(
+                            child: Icon(Icons.auto_stories_rounded,
+                                color: Colors.white38, size: 80),
+                          ),
+                        ),
+                      )
+                    : Image.asset(
+                        'assets/${comic.coverAsset}',
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          decoration: const BoxDecoration(gradient: AppColors.heroGradient),
+                          child: const Center(
+                            child: Icon(Icons.auto_stories_rounded,
+                                color: Colors.white38, size: 80),
+                          ),
+                        ),
+                      ),
               ),
             ),
 

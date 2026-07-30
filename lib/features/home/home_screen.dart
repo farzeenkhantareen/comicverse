@@ -227,17 +227,29 @@ class _ContinueReadingCard extends ConsumerWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(AppSizes.radiusSm),
-                  child: Image.asset(
-                    'assets/${comic.coverAsset}',
-                    width: 50,
-                    height: 75,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      width: 50,
-                      height: 75,
-                      color: AppColors.primaryPurple,
-                    ),
-                  ),
+                  child: comic.coverAsset.startsWith('http')
+                      ? Image.network(
+                          comic.coverAsset,
+                          width: 50,
+                          height: 75,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            width: 50,
+                            height: 75,
+                            color: AppColors.primaryPurple,
+                          ),
+                        )
+                      : Image.asset(
+                          'assets/${comic.coverAsset}',
+                          width: 50,
+                          height: 75,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            width: 50,
+                            height: 75,
+                            color: AppColors.primaryPurple,
+                          ),
+                        ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
